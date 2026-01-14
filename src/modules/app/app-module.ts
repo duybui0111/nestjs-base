@@ -5,12 +5,13 @@ import app from './config/app';
 import { GetApplicationUsecase } from './application/usecases/get-application-use-case';
 import { APP_FILTER } from '@nestjs/core';
 import { AllExceptionFilter } from '../../common/filters/all-exception-filter';
+import swagger from '../../config/swagger';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
-      load: [app],
+      load: [app, swagger],
     }),
   ],
   controllers: [AppController],
