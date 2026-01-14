@@ -3,10 +3,10 @@ import {
   Catch,
   ArgumentsHost,
   HttpException,
-  HttpStatus,
 } from '@nestjs/common';
 import { ErrorException } from '../exceptions/entities/error-exception';
 import { ErrorExceptionFactory } from '../exceptions/factory/error-exception-factory';
+import { ErrorCode } from '../exceptions/enums/error-code';
 
 @Catch()
 export class AllExceptionFilter implements ExceptionFilter {
@@ -23,14 +23,15 @@ export class AllExceptionFilter implements ExceptionFilter {
       return exception;
     }
 
-    const status =
+    const errorCode =
       exception instanceof HttpException
-        ? exception.getStatus()
-        : HttpStatus.INTERNAL_SERVER_ERROR;
+        ? `${ErrorCode.HTTP_ERROR}|${exception.getStatus()}`
+        : ErrorCode.APP_UNKNOWN_ERROR;
+
     const message =
       exception instanceof HttpException ? exception.message : 'Unknown Error';
 
-    return new ErrorException(`9999|${status}`, message);
+    return new ErrorException(errorCode, message);
   }
 
   private responseError(exception: ErrorException, host: ArgumentsHost): any {

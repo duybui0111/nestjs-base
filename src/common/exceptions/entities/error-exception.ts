@@ -22,8 +22,10 @@ export class ErrorException extends Error {
     this.status = Number(status);
     this.code = Number(code);
     this.error =
-      getEnumKeyByValue(ErrorCode, errorCode) ??
-      getEnumKeyByValue(ErrorCode, ErrorCode.APP_UNKNOWN_ERROR)!;
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-enum-comparison
+      code === ErrorCode.HTTP_ERROR
+        ? 'HTTP_ERROR'
+        : getEnumKeyByValue(ErrorCode, errorCode)!;
     this.message = message;
     this.description = description;
   }
