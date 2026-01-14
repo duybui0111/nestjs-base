@@ -1,0 +1,16 @@
+name: "${COMPOSE_PROJECT_NAME}"
+services:
+  main:
+    restart: on-failure
+    command: |
+      sh -c "
+            npm run build && 
+            npm run start:dev
+      "
+    build:
+      context: ..
+      dockerfile: docker/services/main/Dockerfile
+    ports:
+      - "${APP_PORT}:80"
+    env_file:
+      - ../.env
